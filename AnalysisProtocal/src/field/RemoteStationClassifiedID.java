@@ -14,6 +14,7 @@ public class RemoteStationClassifiedID implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static final byte code = 0x00;
 	
 
 }

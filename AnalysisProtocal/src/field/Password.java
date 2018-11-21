@@ -34,7 +34,7 @@ public class Password implements Serializable,Fields {
 	}
 
 	@Override
-	public int getLength() {
+	public int getFieldsLength() {
 		return LENGTH;
 	}
 

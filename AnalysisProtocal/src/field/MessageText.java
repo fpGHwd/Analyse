@@ -34,7 +34,7 @@ public class MessageText extends ControlCode implements Serializable, Fields {
 	}
 
 	@Override
-	public int getLength() {
+	public int getFieldsLength() {
 		return textLen;
 	}
 

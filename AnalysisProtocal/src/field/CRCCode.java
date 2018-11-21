@@ -9,7 +9,6 @@ import java.io.Serializable;
 
 public class CRCCode implements Serializable, Fields {
 	
-	
 	/**
 	 * 
 	 */
@@ -22,7 +21,7 @@ public class CRCCode implements Serializable, Fields {
 	}
 
 	@Override
-	public int getLength() {
+	public int getFieldsLength() {
 		return LENGTH;
 	}
 

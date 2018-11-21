@@ -19,7 +19,7 @@ public class MessageSendTime implements Fields , Serializable {
 	private byte[] content = new byte[LENGTH];
 
 	@Override
-	public int getLength() {
+	public int getFieldsLength() {
 		return LENGTH;
 	}
 }

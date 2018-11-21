@@ -9,8 +9,6 @@ import java.io.Serializable;
  */
 
 public class RainfallAmount implements Fields, Serializable {
-
-	
 	/**
 	 * 
 	 */
@@ -29,7 +27,7 @@ public class RainfallAmount implements Fields, Serializable {
 	private double voltage = 0.0; // TODO to apart
 
 	@Override
-	public int getLength() {
+	public int getFieldsLength() {
 		// TODO Auto-generated method stub
 		return 0;
 	}

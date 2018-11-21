@@ -58,7 +58,7 @@ public class MessagePackageSumNumber extends ControlCode implements Serializable
 	}
 
 	@Override
-	public int getLength() {
+	public int getFieldsLength() {
 		return LENGTH;
 	}
 }

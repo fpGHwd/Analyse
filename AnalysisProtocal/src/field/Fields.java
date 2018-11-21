@@ -8,5 +8,6 @@ package field;
 
 public interface Fields{
 	
-	public int getLength();
+	public int getFieldsLength();
+//	public int getFieldsLength();
 }

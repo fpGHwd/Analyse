@@ -4,11 +4,11 @@ import java.io.Serializable;
 
 import org.junit.Test;
 
-import MessageText.TestFrame34H;
 import calculate.ByteArray;
 import excptions.LengthException;
 import excptions.ValueException;
 import field.FunctionCode;
+import frames.TestFrame34H;
 import frames.UpFrame;
 
 /**

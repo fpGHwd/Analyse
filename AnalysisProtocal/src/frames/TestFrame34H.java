@@ -1,4 +1,4 @@
-package MessageText;
+package frames;
 
 import java.util.Date;
 

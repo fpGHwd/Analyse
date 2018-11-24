@@ -1,4 +1,4 @@
-package hexdate;
+package text;
 
 import org.junit.Test;
 
@@ -14,7 +14,7 @@ public class BCD {
 
 	public static void main(String args[]) {
 		// System.out.println(BCDBytetoInt((byte) 0xF1));
-		byte[] in = {0x12, 0x34, 0x56};
+		byte[] in = { 0x12, 0x34, 0x56 };
 		System.out.println(BCDToDecimal(in));
 
 	}

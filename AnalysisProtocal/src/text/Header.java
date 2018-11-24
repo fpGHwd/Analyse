@@ -1,4 +1,4 @@
-package hexdate;
+package text;
 
 /**
  * @author Suzumiya

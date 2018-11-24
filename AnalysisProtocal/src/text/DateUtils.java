@@ -1,4 +1,4 @@
-package hexdate;
+package text;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -42,25 +42,17 @@ public class DateUtils {
 		return dateToString(date);
 	}
 
-	public static String dateStringByStep(Date date, int type, int step) {
+	public static Date dateStringByStep(Date date, int type, int step) {
 		Date result = null;
-		switch (type) {
-		case 0:
-			result = new Date(date.getYear(), date.getMonth(), date.getDay(), date.getHours(), date.getMinutes(),
-					date.getSeconds());
-		case 1: // day step
-			result = new Date(date.getYear(), date.getMonth(), date.getDay() + step, date.getHours(), date.getMinutes(),
-					date.getSeconds());
-			break;
-		case 2: // hours step
-			result = new Date(date.getYear(), date.getMonth(), date.getDay(), date.getHours()+step, date.getMinutes(),
-					date.getSeconds());
-			break;
-		case 3:
-			result = new Date(date.getYear(), date.getMonth(), date.getDay(), date.getHours(), date.getMinutes() + step,
-					date.getSeconds());
-			break;
-		}
-		return dateToString(result);
+		int delta = 0;
+		
+		if(type ==0);
+		else if(type == 1)delta = step * 24 * 60;
+		else if(type == 2)delta = step*60;
+		else if (type == 3)delta = step;
+		result = new Date(date.getYear(), date.getMonth(), date.getDay(), date.getHours(), date.getMinutes() + step,
+				date.getSeconds());
+		
+		return result;
 	}
 }

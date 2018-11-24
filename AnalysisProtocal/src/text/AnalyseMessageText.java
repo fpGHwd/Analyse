@@ -1,4 +1,4 @@
-package hexdate;
+package text;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,11 +15,11 @@ import excptions.LengthException;
 public class AnalyseMessageText {
 
 	public static void main(String args[]) {
-		
+
 		String[] messages = new String[] {
 				// 链路维持报
 				"7E7E00001234567812342F00080200071401211457130395E5",
-				
+
 				// 测试报
 				"7E7E000012345678123430002B020007140121145707F1F1001234567848"
 						+ "F0F01401211457201900000526190000053923000002393812115303B0" + "78",
@@ -41,8 +41,8 @@ public class AnalyseMessageText {
 				"7E7E62004455667704D234006802007D140121170010F1F1004455667748"
 						+ "F0F01401211605F4600A05050A000F050A0A0A0A0AF0F0140121170026"
 						+ "19000110F0F01401211605F5C00064006F007200710072007400780079"
-						+ "007B007B007E007FF0F014012117002019000110392300002271381211" + "53030111",};
-		
+						+ "007B007B007E007FF0F014012117002019000110392300002271381211" + "53030111", };
+
 		for (int i = 0; i < messages.length; i++) {
 			byte[] temp = ByteArray.stringToBytes(messages[i]);
 			byte[] temp_message_text = ByteArray.subBytes(temp, 14, temp.length - 3 - 14);
@@ -132,61 +132,49 @@ public class AnalyseMessageText {
 
 				// 数据格式区
 				{
-					if (text[pos] != (byte) 0x04) { // 0x04时间步长码
-						idCode = text[pos];
-						dataCode = text[pos + 1];
-						id = ByteArray.byteToString(idCode);
-						pos += 2;
+					idCode = text[pos];
+					dataCode = text[pos + 1];
+					id = ByteArray.byteToString(idCode);
+					pos += 2;
 
-						// 0x31的0418和0x3923理解为配套产生，或同类型的其他报文两个因素同时出现，直接修改step
-
-						dataLength = ((dataCode & 0x000000ff) >> 3);// TODO
-						floatLength = ((dataCode & 0x000000ff) % (1 << 3));
-
-					} else {
-						idCode = text[pos];
-						dataCode = text[pos + 1];
-						// 逻辑上这里的浮点位数一定是0，只取整数位 //不做处理
-						pos += 2;
-						dataLength = (dataCode >>> 3); // 获得单个数据的长度，实际上只是000000三位
-						if (text[pos] != (byte) 0x00) {
-							step_type = 1;
-							time_step = (int) (text[pos] & 0x000000ff);
-						} else if (text[pos + 1] != (byte) 0x00) {
-							step_type = 2;
-							time_step = (int) (text[pos + 1] & 0x000000ff);
-						} else if (text[pos + 2] != (byte) 0x00) {
-							step_type = 3;
-							time_step = (int) (text[pos + 2] & 0x000000ff);
-						}
-						pos += dataLength;
-						continue;// step_time和step_type是控制信息，直接返回
-					}
+					dataLength = ((dataCode & 0x000000ff) >> 3);
+					floatLength = ((dataCode & 0x000000ff) % (1 << 3));
 				}
 
 				// 数据值区
 				{
 					// 0x32前面有步长信息完全由实际报文结构决定，如果没有，数据会有误。// 没有判断
 					// 0x31的0418后面的三个字节表示的time_step(均匀时段水文信息报)
-					if ((idCode == (byte) 0xf4) || (idCode == (byte) 0xf5)) { // 1小时每5分钟的
-						for (int i = 0; i < 12; i++) {
-							value = ByteArray.byteArrayToInt(ByteArray.subBytes(text, pos, dataLength / 12));
-							ot = DateUtils.dateStringByStep(ot_date, 3, 5 * i);
-							pos += dataLength / 12;
-							temp_str = StringUtils.formFloatString(value, floatLength);
-							Factor f = new Factor(cs, rsa, fc, mt, scid, ot, id, temp_str, new Date());
-							listobj.add(f);
+					if ((idCode == (byte) 0xf4) || (idCode == (byte) 0xf5)
+							|| ((idCode == (byte) 0x39) && (header.function_code == (byte) 0x31))) { // 1小时每5分钟的
+						if ((idCode == (byte) 0xf4) || (idCode == (byte) 0xf5)) {
+							time_step = 5;
+							dataLength /= 12;
 						}
-					} else if (((idCode == (byte) 0x39) && (header.function_code == (byte) 0x31))) {
-						// 两组要素构成的一组因素
+						// hex表示
 						for (int i = 0; i < 12; i++) {
-							value = BCD.BCDToDecimal(ByteArray.subBytes(text, pos, dataLength));
-							ot = DateUtils.dateStringByStep(ot_date, step_type, time_step * i); // i+1?																// i+1
+							value = ByteArray.byteArraytoInt(ByteArray.subBytes(text, pos, dataLength));
+							ot_date = DateUtils.dateStringByStep(ot_date, step_type, time_step); // i+1?
+							ot = DateUtils.dateToStringDate(ot_date);
 							pos += dataLength;
 							temp_str = StringUtils.formFloatString(value, floatLength);
 							Factor f = new Factor(cs, rsa, fc, mt, scid, ot, id, temp_str, new Date());
 							listobj.add(f);
 						}
+					} else if (idCode == (byte) 0x04) {
+						// 逻辑上这里的浮点位数一定是0，只取整数位 //不做处理
+						dataLength = (dataCode >>> 3); // 获得单个数据的长度，实际上只是000000三位
+						if (text[pos] != (byte) 0x00) {
+							step_type = 1;
+							time_step = (text[pos] & 0x000000ff);
+						} else if (text[pos + 1] != (byte) 0x00) {
+							step_type = 2;
+							time_step = (text[pos + 1] & 0x000000ff);
+						} else if (text[pos + 2] != (byte) 0x00) {
+							step_type = 3;
+							time_step = (text[pos + 2] & 0x000000ff);
+						}
+						pos += dataLength;
 					} else { // 单组其他没有多组数据的要素
 						value = BCD.BCDToDecimal(ByteArray.subBytes(text, pos, dataLength));
 						pos += dataLength;

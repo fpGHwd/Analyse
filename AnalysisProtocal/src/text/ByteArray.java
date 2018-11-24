@@ -1,4 +1,4 @@
-package hexdate;
+package text;
 
 import org.junit.Test;
 
@@ -71,32 +71,30 @@ public class ByteArray {
 
 		return a.toString();
 	}
-	
-	
-	public static void main(String args[]){
-		byte b = (byte)0xF6;
+
+	public static void main(String args[]) {
+		byte b = (byte) 0xF6;
 		System.out.println(byteToString(b));
 	}
-	
-	public static final char[] HEX_CHAR = {'0','1', '2', '3', '4', '5', '6','7', '8','9','A', 'B', 'C', 'D', 'E', 'F'};
-	
+
+	public static final char[] HEX_CHAR = "0123456789ABCDEF".toCharArray();
 	public static String byteToString(byte b) {
 		char[] buf = new char[2];
-		buf[0] = HEX_CHAR[ (b >>> 4) & 0x0f]; // 无符号右移
-		buf[1] = HEX_CHAR[ b & 0x0f];
+		buf[0] = HEX_CHAR[(b >>> 4) & 0x0f]; // 无符号右移
+		buf[1] = HEX_CHAR[b & 0x0f];
 
 		return new String(buf);
 	}
-	
-	public static String bytesToHexString(byte[] bytes){
-		
+
+	public static String bytesToHexString(byte[] bytes) {
+
 		char[] buf = new char[bytes.length * 2];
-        int index = 0;
-        for(byte b : bytes) { // 利用位运算进行转换，可以看作方法一的变种
-            buf[index++] = HEX_CHAR[b >>> 4 & 0xf];
-            buf[index++] = HEX_CHAR[b & 0xf];
-        }
-        return new String(buf);
+		int index = 0;
+		for (byte b : bytes) { // 利用位运算进行转换，可以看作方法一的变种
+			buf[index++] = HEX_CHAR[b >>> 4 & 0xf];
+			buf[index++] = HEX_CHAR[b & 0xf];
+		}
+		return new String(buf);
 	}
 
 	// 字符流转换成字符串
@@ -115,18 +113,19 @@ public class ByteArray {
 		}
 		return sb.toString();
 	}
-	
-	public static int byteArrayToInt(byte[] b) 
-	{
-	    int value = 0;
-	    for (int i = 0; i < b.length; i++) {
-/*	        int shift = (4 - 1 - i) * 8;
-	        value += (b[i] & 0x000000FF) << shift;*/
-	    	value <<= 8;
-	    	value += (((b[i] & 0xf0)>>4)<<4) + (b[i] & 0x0f);
-	    	
-	    }
-	    return value;
+
+	public static int byteArrayToInt(byte[] b) {
+		int value = 0;
+		for (int i = 0; i < b.length; i++) {
+			/*
+			 * int shift = (4 - 1 - i) * 8; value += (b[i] & 0x000000FF) <<
+			 * shift;
+			 */
+			value <<= 8;
+			value += (((b[i] & 0xf0) >> 4) << 4) + (b[i] & 0x0f);
+
+		}
+		return value;
 	}
 
 }

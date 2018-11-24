@@ -1,4 +1,4 @@
-package hexdate;
+package text;
 
 import java.util.Date;
 
@@ -19,8 +19,7 @@ public class Factor {
 	private String identifier_num;
 	private String receive_time;
 
-	public Factor(String cs, String ts, String fc, Date st, 
-			String stype,Date f0f0, String id, String id_n, Date dt) {
+	public Factor(String cs, String ts, String fc, Date st, String stype, Date f0f0, String id, String id_n, Date dt) {
 		setCenter_station(cs);
 		setTelementry_station(ts);
 		setFunction_code(fc);
@@ -31,15 +30,15 @@ public class Factor {
 		setIdentifier_num(id_n);
 		setReceive_time(dt);
 	}
-	
-	public Factor(String cs, String ts, String fc, String st, 
-			String stype,String f0f0, String id, String id_n, Date dt) {
+
+	public Factor(String cs, String ts, String fc, String st, String stype, String f0f0, String id, String id_n,
+			Date dt) {
 		setCenter_station(cs);
 		setTelementry_station(ts);
 		setFunction_code(fc);
 		send_time = st;
 		setStation_type(stype);
-		F0F0= f0f0;
+		F0F0 = f0f0;
 		setIdentifier(id);
 		setIdentifier_num(id_n);
 		setReceive_time(dt);

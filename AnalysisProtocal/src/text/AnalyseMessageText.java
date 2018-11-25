@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.junit.Test;
+
 import excptions.LengthException;
 
 /**
@@ -14,7 +16,8 @@ import excptions.LengthException;
 
 public class AnalyseMessageText {
 
-	public static void main(String args[]) {
+	@Test
+	public void test() {
 
 		String[] messages = new String[] {
 				// 链路维持报
@@ -113,6 +116,8 @@ public class AnalyseMessageText {
 		int dataLength, floatLength;
 		byte idCode, dataCode;
 		long value = 0;
+		Date ot_date_f0f0 = ot_date;
+		String ot_f0f0 = ot;
 
 		while (pos < text.length) {
 
@@ -120,8 +125,8 @@ public class AnalyseMessageText {
 			if ((text[pos] == ((byte) 0xF0)) && (text[pos + 1] == ((byte) 0xf0))) {
 				pos += 2;
 
-				ot_date = DateUtils.hexBytesToDate(ByteArray.subBytes(text, pos, 5));
-				ot = DateUtils.dateToString(ot_date);
+				ot_date_f0f0 = DateUtils.hexBytesToDate(ByteArray.subBytes(text, pos, 5));
+				ot_f0f0 = DateUtils.dateToString(ot_date);
 				// 步长时间函数
 				// 观察时间后面必然会跟着相应的数据，无需标识
 				pos += 5;
@@ -152,13 +157,13 @@ public class AnalyseMessageText {
 							dataLength /= 12;
 						}
 						// hex表示
-						for (int i = 0; i < 12; i++) {
+						for (int i = 0; i < 12; i++) { // 每一个有分组数据的数据项前面都有一个f0f0项
 							value = ByteArray.byteArraytoInt(ByteArray.subBytes(text, pos, dataLength));
-							ot_date = DateUtils.dateStringByStep(ot_date, step_type, time_step); // i+1?
-							ot = DateUtils.dateToStringDate(ot_date);
+							ot_date_f0f0 = DateUtils.dateStringByStep(ot_date_f0f0, step_type, time_step); // i+1?
+							ot_f0f0 = DateUtils.dateToStringDate(ot_date_f0f0);
 							pos += dataLength;
 							temp_str = StringUtils.formFloatString(value, floatLength);
-							Factor f = new Factor(cs, rsa, fc, mt, scid, ot, id, temp_str, new Date());
+							Factor f = new Factor(cs, rsa, fc, mt, scid, ot_f0f0, id, temp_str, new Date());
 							listobj.add(f);
 						}
 					} else if (idCode == (byte) 0x04) {

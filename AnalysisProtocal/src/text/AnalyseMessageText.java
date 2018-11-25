@@ -187,10 +187,7 @@ public class AnalyseMessageText {
 		}
 		if (pos != text.length)
 			return null;
-		/*
-		 * System.out.println(mt); System.out.println(ot);
-		 * System.out.println(receive_time);
-		 */
+
 		return listobj;
 	}
 }

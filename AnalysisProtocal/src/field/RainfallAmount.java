@@ -28,7 +28,6 @@ public class RainfallAmount implements Fields, Serializable {
 
 	@Override
 	public int getFieldsLength() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
